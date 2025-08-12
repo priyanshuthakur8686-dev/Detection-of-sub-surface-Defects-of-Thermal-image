@@ -1,134 +1,161 @@
-🔍 Detection of Sub-surface Defects from Thermal Images
-📌 Overview
-Sub-surface defects such as cracks, voids, delaminations, and corrosion spots are often hidden beneath a material's surface and can compromise the structural strength of components in industries such as aerospace, automotive, civil infrastructure, and manufacturing.
-While traditional inspection methods like ultrasonic testing and visual inspection have their advantages, they are time-consuming, labor-intensive, and sometimes ineffective for early-stage defect detection.
+#🔍 Detection of Sub-surface Defects from Thermal Images
+#📌 Overview
+Sub-surface defects—such as cracks, voids, delaminations, and corrosion—often remain hidden beneath the surface of materials. While invisible to the naked eye, they can cause serious safety hazards in engineering structures, machinery, and infrastructure.
+Thermal imaging offers a non-destructive testing (NDT) method to detect these anomalies by capturing temperature differences that may indicate underlying issues.
 
-Thermal imaging provides a non-contact, non-destructive, and rapid inspection technique, where temperature variations reveal material inconsistencies. However, manual inspection of thermal images is prone to human error, especially when contrast is low or defects are small.
+This project presents an automated defect detection pipeline that uses computer vision techniques to process infrared thermal images, identify potential defects, and highlight them for further analysis.
 
-This project introduces an automated computer vision approach to detect and highlight sub-surface defects from thermal infrared images using OpenCV-based edge detection and contour extraction techniques.
+#🚩 Problem Statement
+Industrial components, pipelines, aerospace structures, and civil engineering constructions can develop hidden defects over time due to:
 
-🚩 Problem Statement
-Structural defects hidden beneath the surface are difficult to identify without specialized techniques.
+Material fatigue
 
-Manual inspection is subjective and varies with operator experience.
+Corrosion
 
-Small defects in low-resolution or noisy thermal images may go undetected.
+Mechanical stress
 
-There is a need for an automated, reliable, and fast detection system to improve safety and reduce maintenance costs.
+Environmental degradation
 
-🎯 Objectives
-Develop an automated pipeline for detecting sub-surface defects in thermal infrared images.
+Traditional inspection methods such as manual visual checks or ultrasonic testing have limitations:
 
-Improve edge clarity while preserving fine defect boundaries.
+Manual methods are subjective and inconsistent.
 
-Reduce false positives through noise suppression and morphological filtering.
+Ultrasonic/X-ray methods require expensive equipment and skilled operators.
 
-Present detection results in a clear, visual format for easy interpretation.
+Many techniques are time-consuming and not scalable for large structures.
 
-💡 Proposed Solution
-We present an edge-based image processing framework with the following features:
+An automated, fast, and reliable method is needed for early-stage defect detection to prevent catastrophic failures.
 
-Grayscale conversion to simplify data representation.
+#🎯 Objectives
+The main goals of this project are:
 
-Bilateral filtering for denoising while preserving sharp defect boundaries.
+Develop an automated defect detection system for thermal images.
 
-Canny edge detection for accurate crack boundary extraction.
+Ensure noise removal while preserving defect edges.
 
-Morphological closing to connect broken edges.
+Implement a robust edge detection algorithm suitable for low-contrast thermal images.
 
-Contour detection and overlay for final defect visualization.
+Visualize detection results in a clear and interpretable format for engineers and inspectors.
 
-Multi-view visualization showing intermediate and final results in a tabular layout.
+#💡 Proposed Solution
+Our solution integrates image preprocessing, noise filtering, and contour detection into a single processing pipeline.
+Key highlights:
 
-⚙️ Methodology
-Step 1 – Image Acquisition
-Input: Infrared (IR) thermal images captured using a FLIR camera or equivalent thermal imaging device.
+Bilateral filtering for edge-preserving noise removal.
 
-Format: .jpg or .png
+Canny edge detection for identifying defect boundaries.
 
-Step 2 – Preprocessing
-Convert RGB to grayscale for simplified processing.
+Morphological operations for cleaning the detected edges.
 
-Apply bilateral filtering (cv2.bilateralFilter) to remove noise while maintaining edges.
+Contour overlay to highlight defects clearly.
 
-Step 3 – Edge Detection
-Use Canny edge detection with optimized thresholds (40 and 120) to capture fine cracks and structural defects.
+This approach ensures a balance between detection accuracy and computational efficiency, making it suitable for real-time or batch analysis.
 
-Step 4 – Morphological Filtering
-Apply morphological closing (cv2.MORPH_CLOSE) with a 3×3 kernel to fill small gaps in detected edges.
+#🛠️ Methodology
+Step 1: Image Acquisition
+Thermal images are captured using an Infrared Thermal Camera.
+(Example Image)
 
-Step 5 – Contour Extraction
-Identify continuous boundaries of defects using cv2.findContours.
+arduino
+Copy
+Edit
+[Place sample thermal image here]
+Step 2: Preprocessing
+Convert to Grayscale to reduce computational complexity.
 
-Overlay contours in red on the grayscale image for defect marking.
+Apply Bilateral Filter to remove noise while preserving edges.
 
-Step 6 – Visualization
-Present results in a 2×2 table layout:
+python
+Copy
+Edit
+blurred = cv2.bilateralFilter(gray, 9, 75, 75)
+Step 3: Edge Detection
+Use Canny edge detection with tuned thresholds (40, 120).
+
+python
+Copy
+Edit
+edges = cv2.Canny(blurred, 40, 120)
+Step 4: Morphological Filtering
+Apply closing operation to bridge small gaps in edges.
+
+python
+Copy
+Edit
+kernel = np.ones((3, 3), np.uint8)
+edges_clean = cv2.morphologyEx(edges, cv2.MORPH_CLOSE, kernel, iterations=2)
+Step 5: Contour Extraction
+Extract external contours of the detected regions.
+
+Overlay contours in red on the grayscale image.
+
+Step 6: Visualization
+Display results in table format:
 
 Grayscale Image
 
 Denoised Image
 
-Edge Detection Result
+Edges Detected
 
-Final Defect Highlighted Image
+Final Crack Detection
 
-🖥️ Implementation Details
-Languages & Libraries
-Python 3.9+
+#📊 Results
+Stage	Output Description
+Grayscale Image	Raw infrared image converted to grayscale.
+Denoised Image	Bilateral filter applied to preserve edges while reducing noise.
+Edges Detected	Canny edge detection output showing possible defect outlines.
+Final Detection	Contours highlighted in red on grayscale image for clear defect visualization.
 
-OpenCV for image processing
+(Example Output Images)
 
-NumPy for matrix operations
+csharp
+Copy
+Edit
+[Place 2x2 subplot result here]
+#🚀 Future Scope
+This project can be extended to:
 
-Matplotlib for visualization
+Deep Learning Models: Use CNNs or Vision Transformers for automatic defect classification.
+
+Real-time Processing: Integrate into industrial inspection systems with live camera feeds.
+
+Multi-Spectral Analysis: Combine thermal data with visible light images for enhanced accuracy.
+
+3D Defect Mapping: Use multiple images to reconstruct defect geometry.
+
+#📂 Dataset
+The thermal images used in this project can be:
+
+Captured using FLIR or Seek Thermal cameras.
+
+Obtained from public infrared datasets such as:
+
+FLIR Thermal Dataset
+
+Infrared Thermographic Image Dataset (ITID)
+
+#🖥️ Implementation Details
+Languages & Tools
+Python 3.8+
+
+OpenCV – Image processing
+
+NumPy – Numerical operations
+
+Matplotlib – Visualization
 
 Code Structure
 bash
 Copy
 Edit
-📂 thermal-defect-detection
-│── defect_detection.py     # Main detection script
-│── sample_images/           # Thermal image samples
-│── results/                 # Output images
-│── README.md                # Project documentation
-│── requirements.txt         # Dependencies
-📊 Results & Analysis
-Processing Stage	Description
-Grayscale Image	Removes color information, focuses on temperature intensity distribution.
-Denoised Image	Bilateral filter reduces noise while preserving edges.
-Edges Detected	Canny algorithm highlights defect boundaries.
-Final Detection	Contours overlaid on grayscale image for visual defect marking.
-
-Performance Observations:
-
-Noise suppression improved edge clarity by ~25% compared to Gaussian blur.
-
-Morphological closing reduced broken edge segments by ~40%.
-
-Works effectively on low-contrast defects.
-
-📈 Future Scope
-Integration with Machine Learning: Use CNNs or Vision Transformers for defect classification.
-
-Real-time detection: Implement with GPU acceleration for live monitoring.
-
-Multi-modal analysis: Combine thermal and visible-light images for better accuracy.
-
-Quantitative defect analysis: Measure length, width, and depth estimation of cracks.
-
-Edge refinement using AI: Enhance boundary detection for extremely small cracks.
-
-📂 Dataset
-Images captured using FLIR thermal cameras.
-
-Can be replaced with public datasets such as:
-
-FLIR Thermal Dataset
-
-Infrared Thermography Crack Detection Dataset
-
-⚙️ Installation & Usage
+📁 thermal-defect-detection
+ ┣ 📜 defect_detection.py   # Main detection script
+ ┣ 📜 README.md             # Project documentation
+ ┣ 📂 images/               # Sample input thermal images
+ ┣ 📂 results/              # Output defect detection results
+ ┗ 📜 requirements.txt      # Dependencies
+📥 Installation & Usage
 bash
 Copy
 Edit
@@ -141,19 +168,20 @@ pip install -r requirements.txt
 
 # Run the detection script
 python defect_detection.py
+📜 License
+This project is licensed under the MIT License – you are free to use, modify, and distribute it.
 
 🙌 Acknowledgements
-OpenCV and NumPy communities.
+OpenCV and NumPy developers for their amazing libraries.
 
-Researchers in infrared thermography for pioneering work in defect detection.
+Research studies on Infrared Thermography and NDT for background inspiration.
 
-FLIR Systems for thermal imaging technology.
+The thermal imaging community for making datasets available.
 
 🧑‍💻 Author
 Priyanshu Singh
-B.Tech – Electronics & Communication Engineering
+B.Tech in Electronics & Communication Engineering
 National Institute of Technology, Goa
 
 📧 Email: priyanshuthakur8686@gmail.com
 🔗 LinkedIn: https://shorturl.at/6XLNS
-
